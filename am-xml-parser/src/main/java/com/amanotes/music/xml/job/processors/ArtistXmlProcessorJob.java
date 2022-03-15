@@ -1,0 +1,63 @@
+package com.amanotes.music.xml.job.processors;
+
+import com.amanotes.music.xml.job.AbstractXmlProcessorJob;
+import com.amanotes.music.xsd.model.transformed.single.Artist;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.InputStreamResource;
+
+/**
+ * @author Minh-Luan H. Phan
+ * Created on: 2022.03.15 14:46
+ */
+@Configuration
+@EnableBatchProcessing
+public class ArtistXmlProcessorJob extends AbstractXmlProcessorJob<Artist> {
+
+    private InputStreamResource inputStreamResource;
+
+    @Override
+    protected Class<Artist> getElement() {
+        return Artist.class;
+    }
+
+    @Override
+    protected void onReceiveRecord(Artist item) {
+        System.out.println(item.getId());
+    }
+
+    @Override
+    protected InputStreamResource openInputStream() {
+        this.inputStreamResource = this.getInputStream();
+        return inputStreamResource;
+    }
+
+    @Override
+    @Bean("Artist-itemReader")
+    public ItemReader<Artist> itemReader() {
+        return super.itemReader();
+    }
+
+    @Override
+    @Bean("Artist-itemWriter")
+    public ItemWriter<Artist> itemWriter() {
+        return super.itemWriter();
+    }
+
+    @Override
+    @Bean("Artist-step")
+    public Step step() {
+        return super.step();
+    }
+
+    @Override
+    @Bean("artistSyncingJob")
+    public Job process() {
+        return super.process();
+    }
+}

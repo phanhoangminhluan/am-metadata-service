@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: MNFeed.xsd 109104 2010-05-12 23:03:57Z otodoran $ -->
+<xsd:schema xmlns:sql="urn:schemas-microsoft-com:mapping-schema"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified">
+    <xsd:element name="Feed" type="Feed"/>
+    <xsd:simpleType name="activeStatusCode">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="A"/>
+            <xsd:enumeration value="D"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="tfIndicator">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="TRUE"/>
+            <xsd:enumeration value="FALSE"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:complexType name="Header">
+        <xsd:sequence>
+            <xsd:element name="Created-Date" type="xsd:dateTime"/>
+            <xsd:element name="Feed-Type">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="INCREMENTAL"/>
+                        <xsd:enumeration value="FULL"/>
+                        <xsd:enumeration value="INC_VERSIONCOPY"/>
+                        <xsd:enumeration value="RUSH"/>
+                        <xsd:enumeration value="RESUBMIT"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="Sequence-Number" type="xsd:int"/>
+            <xsd:element name="Version" type="xsd:string"/>
+            <xsd:element name="Last-AMG-processed" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Genre-Reference">
+        <xsd:sequence maxOccurs="unbounded">
+            <xsd:element name="Genre" type="Genre"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Genre">
+        <xsd:sequence>
+            <xsd:element name="Id" type="xsd:integer" sql:field="id"/>
+            <xsd:element name="Name" type="xsd:string" sql:field="genre_name"/>
+            <xsd:element name="Genre-Category" type="xsd:string" sql:field="genre_category"/>
+            <xsd:element name="Genre-Type" type="xsd:string" sql:field="genre_type"/>
+            <xsd:element name="Parent-Genre-Id" type="xsd:integer" sql:field="parent_genre_id" minOccurs="0"/>
+            <xsd:element name="Created-Date" type="xsd:date" sql:field="created_date"/>
+            <xsd:element name="Last-Updated-Date" type="xsd:date" sql:field="last_updated_date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Component-Types">
+        <xsd:sequence maxOccurs="unbounded">
+            <xsd:element name="Component-Type" type="Component-Type"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Component-Type">
+        <xsd:sequence>
+            <xsd:element name="Id" type="xsd:integer" sql:field="id"/>
+            <xsd:element name="Type-Code" type="xsd:string" sql:field="type_code"/>
+            <xsd:element name="Parent-Ind" type="tfIndicator" sql:field="parent_ind"/>
+            <xsd:element name="Genre-Category" type="xsd:string" sql:field="genre_category"/>
+            <xsd:element name="Created-Date" type="xsd:date" sql:field="created_date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Metadata-Types">
+        <xsd:sequence maxOccurs="unbounded">
+            <xsd:element name="Metadata-Type" type="Metadata-Type"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Metadata-Type">
+        <xsd:sequence>
+            <xsd:element name="Id" type="xsd:integer" sql:field="id"/>
+            <xsd:element name="Type-Code" type="xsd:string" sql:field="type_code"/>
+            <xsd:element name="Created-Date" type="xsd:date" sql:field="created_date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Metadata-Special-Codes">
+        <xsd:sequence maxOccurs="unbounded">
+            <xsd:element name="Special-Code" type="Special-Code"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Special-Code">
+        <xsd:sequence>
+            <xsd:element name="Code" type="xsd:string" sql:field="code"/>
+            <xsd:element name="Description" type="xsd:string" sql:field="description"/>
+            <xsd:element name="Last-Updated-Date" type="xsd:date" sql:field="last_updated_date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Artist-Types">
+        <xsd:sequence maxOccurs="unbounded">
+            <xsd:element name="Artist-Type" type="Artist-Type"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Artist-Type">
+        <xsd:sequence>
+            <xsd:element name="Id" type="xsd:integer" sql:field="id"/>
+            <xsd:element name="Type-Code" type="xsd:string" sql:field="type_name"/>
+            <xsd:element name="Created-Date" type="xsd:date" sql:field="created_date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Territories">
+        <xsd:sequence maxOccurs="unbounded">
+            <xsd:element name="Territory" type="Territory"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Territory">
+        <xsd:sequence>
+            <xsd:element name="Id" type="xsd:integer" sql:field="id"/>
+            <xsd:element name="Territory-Code" type="xsd:string" sql:field="territory_code"/>
+            <xsd:element name="Territory-Name" type="xsd:string" sql:field="territory_name"/>
+            <xsd:element name="Created-Date" type="xsd:date" sql:field="created_date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Currencies">
+        <xsd:sequence maxOccurs="unbounded">
+            <xsd:element name="Currency" type="Currency"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Currency">
+        <xsd:sequence>
+            <xsd:element name="Id" type="xsd:integer" sql:field="id"/>
+            <xsd:element name="Currency-Code" type="xsd:string" sql:field="currency_code"/>
+            <xsd:element name="Currency-Name" type="xsd:string" sql:field="currency_name"/>
+            <xsd:element name="Created-Date" type="xsd:date" sql:field="created_date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Price-Scopes">
+        <xsd:sequence maxOccurs="unbounded">
+            <xsd:element name="Price-Scope" type="Price-Scope"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Price-Scope">
+        <xsd:sequence>
+            <xsd:element name="Id" type="xsd:integer" sql:field="id"/>
+            <xsd:element name="Scope-Code" type="xsd:string" sql:field="scope_code"/>
+            <xsd:element name="Description" type="xsd:string"/>
+            <xsd:element name="Created-Date" type="xsd:date" sql:field="created_date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Label-Owners">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Label-Owner" type="Label-Owner"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Label-Owner">
+        <xsd:sequence>
+            <xsd:element name="Id" type="xsd:integer" sql:field="id"/>
+            <xsd:element name="Corp-Code" type="xsd:string" sql:field="corp_code"/>
+            <xsd:element name="Label-Owner-Name" type="xsd:string" sql:field="label_owner_name"/>
+            <xsd:element name="Active-Status-Code" type="activeStatusCode" sql:field="active_status_code"/>
+            <xsd:element name="Created-Date" type="xsd:date" sql:field="created_date"/>
+            <xsd:element name="Last-Updated-Date" type="xsd:date" sql:field="last_updated_date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Labels">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Label" type="Label"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Label">
+        <xsd:sequence>
+            <xsd:element name="Id" type="xsd:integer" sql:field="id"/>
+            <xsd:element name="Label-Owner-Id" type="xsd:integer" sql:field="label_owner_id"/>
+            <xsd:element name="Label-Name" type="xsd:string" sql:field="label_name"/>
+            <xsd:element name="Active-Status-Code" type="activeStatusCode" sql:field="active_status_code"/>
+            <xsd:element name="Created-Date" type="xsd:date" sql:field="created_date"/>
+            <xsd:element name="Last-Updated-Date" type="xsd:date" sql:field="last_updated_date"/>
+            <xsd:element name="PA-Ex" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Artists">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Artist" type="Artist"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Artist">
+        <xsd:sequence>
+            <xsd:element name="Id" type="xsd:integer" sql:field="id"/>
+            <xsd:element name="Amg-Id" type="xsd:string" sql:field="amg_id" minOccurs="0"/>
+            <xsd:element name="Name" type="xsd:string" sql:field="name"/>
+            <xsd:element name="Sort-Name" type="xsd:string"/>
+            <xsd:element name="Artist-Category" type="xsd:string" sql:field="artist_category" minOccurs="0"/>
+            <xsd:element name="Created-Date" type="xsd:date" sql:field="created_date"/>
+            <xsd:element name="Last-Updated-Date" type="xsd:date" sql:field="last_updated_date"/>
+            <xsd:element name="PA-Ex" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Languages">
+        <xsd:sequence maxOccurs="unbounded">
+            <xsd:element name="Language" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Components">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Component" type="Component"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Component">
+        <xsd:sequence>
+            <xsd:element name="Id" type="xsd:integer" sql:field="id"/>
+            <xsd:element name="Label-Id" type="xsd:integer" sql:field="label_id"/>
+            <xsd:element name="Comp-Code" type="xsd:string" sql:field="comp_code"/>
+            <xsd:element name="Comp-Type-Id" type="xsd:integer" sql:field="comp_type_id"/>
+            <xsd:element name="Active-Status-Code" type="activeStatusCode" sql:field="active_status_code"/>
+            <xsd:element name="Title" type="xsd:string" sql:field="title"/>
+            <xsd:element name="Sort-Title" type="xsd:string" sql:field="sort_title" minOccurs="0"/>
+            <xsd:element name="Subtitle" type="xsd:string" sql:field="subtitle" minOccurs="0"/>
+            <xsd:element name="Duration" type="xsd:string" sql:field="duration"/>
+            <xsd:element name="Parental-Advisory" type="xsd:string" sql:field="parental_advisory"/>
+            <xsd:choice>
+                <xsd:sequence>
+                    <xsd:element name="Upc" type="xsd:string" sql:field="upc"/>
+                    <xsd:element name="Child-Items-Count" type="xsd:integer" sql:field="child_items_count"/>
+                    <!--                    <xsd:choice>-->
+                    <!--                        &lt;!&ndash; Release-Date is provided as a simple element for one-territory retailers and under Territory-Data for multi-territory retailers &ndash;&gt;-->
+                    <!--                        <xsd:element name="Release-Date" type="xsd:date" sql:field="release_date" minOccurs="0"/>-->
+                    <!--                        <xsd:sequence maxOccurs="unbounded">-->
+                    <!--                            <xsd:element name="Territory-Data" type="Territory-Data"/>-->
+                    <!--                        </xsd:sequence>-->
+                    <!--                    </xsd:choice>-->
+                    <!--                    <xsd:element name="Original-Release-Date" type="xsd:string" sql:field="original_release_date" minOccurs="0">-->
+                    <!--                        <xsd:annotation>-->
+                    <!--                            <xsd:documentation>Date when this component was originally released. Format: YYYYMMDD (month and/or day can be missing). Some providers do not provide this data and MediaNet aggregates it from a variety of sources. Some content may not have it available.</xsd:documentation>-->
+                    <!--                        </xsd:annotation>-->
+                    <!--                    </xsd:element>-->
+                    <xsd:element name="Cover-Art" type="tfIndicator" sql:field="cover_art"/>
+                    <xsd:element name="Single" type="xsd:string" sql:field="single" minOccurs="0"/>
+                    <xsd:element name="Short-Description" type="xsd:string" sql:field="short_description"
+                                 minOccurs="0"/>
+                    <xsd:element name="Description" type="xsd:string" sql:field="description" minOccurs="0"/>
+                    <xsd:element name="Season" type="xsd:string" sql:field="season" minOccurs="0"/>
+                    <xsd:element name="Imprint" type="xsd:string" sql:field="imprint" minOccurs="0"/>
+                    <xsd:element name="Edition" type="xsd:string" sql:field="edition" minOccurs="0"/>
+                    <xsd:element name="Coverage" type="xsd:string" sql:field="coverage" minOccurs="0"/>
+                    <xsd:element name="Table-Of-Contents" type="xsd:string" sql:field="table_of_contents"
+                                 minOccurs="0"/>
+                </xsd:sequence>
+                <xsd:sequence>
+                    <xsd:element name="Isrc" type="xsd:string" sql:field="isrc" minOccurs="0"/>
+                    <xsd:element name="Item-Number" type="xsd:integer" sql:field="track_number"/>
+                    <xsd:element name="Description" type="xsd:string" minOccurs="0"/>
+                    <xsd:choice>
+                        <xsd:sequence>
+                            <xsd:element name="Disk-Number" type="xsd:integer" sql:field="disk_number"/>
+                            <!--                            <xsd:choice>-->
+                            <!--                                &lt;!&ndash; Release-Date is provided as a simple element for one-territory retailers and under Territory-Data for multi-territory retailers &ndash;&gt;-->
+                            <!--                                <xsd:element name="Release-Date" type="xsd:date" sql:field="release_date" minOccurs="0"/>-->
+                            <!--                                <xsd:sequence maxOccurs="unbounded">-->
+                            <!--                                    <xsd:element name="Territory-Data" type="Territory-Data"/>-->
+                            <!--                                </xsd:sequence>-->
+                            <!--                            </xsd:choice>-->
+                            <!--                            <xsd:sequence minOccurs="0" maxOccurs="unbounded">-->
+                            <!--                                <xsd:element name="Territory-Data" type="Territory-Data"/>-->
+                            <!--                            </xsd:sequence>-->
+                        </xsd:sequence>
+                        <xsd:sequence>
+                            <xsd:element name="Audio-Languages" type="Languages" minOccurs="0"/>
+                            <xsd:element name="Subtitle-Languages" type="Languages" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:choice>
+                </xsd:sequence>
+            </xsd:choice>
+            <xsd:element name="Amg-Id" type="xsd:string" sql:field="amg_id" minOccurs="0"/>
+            <xsd:element name="Muze-Id" type="xsd:string" sql:field="muze_id" minOccurs="0"/>
+            <xsd:element name="Exclusive-Ind" type="tfIndicator" sql:field="active_status_code"/>
+            <xsd:element name="Special-Codes" type="xsd:string" sql:field="special_codes" minOccurs="0"/>
+            <xsd:element name="Created-Date" type="xsd:date" sql:field="created_date"/>
+            <xsd:element name="Last-Updated-Date" type="xsd:date" sql:field="last_updated_date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Territory-Data">
+        <xsd:sequence>
+            <xsd:element name="Territory-Id" type="xsd:integer"/>
+            <xsd:element name="Release-Date" type="xsd:date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Artist-Components">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Artist-Component" type="Artist-Component"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Artist-Component">
+        <xsd:sequence>
+            <xsd:element name="Id" type="xsd:integer" sql:field="id"/>
+            <xsd:element name="Comp-Id" type="xsd:integer" sql:field="comp_id"/>
+            <xsd:element name="Artist-Id" type="xsd:integer" sql:field="artist_id"/>
+            <xsd:element name="Artist-Type-Id" type="xsd:integer" sql:field="artist_type_id"/>
+            <xsd:element name="Ranking" type="xsd:integer" sql:field="position_nbr"/>
+            <xsd:element name="Supplemental-Text" type="xsd:string" sql:field="supplemental_text" minOccurs="0"/>
+            <xsd:element name="Created-Date" type="xsd:date" sql:field="created_date"/>
+            <xsd:element name="Last-Updated-Date" type="xsd:date" sql:field="last_updated_date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Artist-Metadata">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Artist-Metadata-Item" type="Artist-Metadata-Item"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Artist-Metadata-Item">
+        <xsd:sequence>
+            <xsd:element name="Id" type="xsd:integer" sql:field="id"/>
+            <xsd:element name="Artist-Id" type="xsd:integer" sql:field="artist_id"/>
+            <xsd:element name="Meta-Type-Id" type="xsd:integer" sql:field="meta_type_id"/>
+            <xsd:element name="Value-Desc" type="xsd:string" sql:field="value_desc"/>
+            <xsd:element name="Title" type="xsd:string" sql:field="title" minOccurs="0"/>
+            <xsd:element name="Publish-Date" type="xsd:date" sql:field="publish_date" minOccurs="0"/>
+            <xsd:element name="Author" type="xsd:string" sql:field="author" minOccurs="0"/>
+            <xsd:element name="Created-Date" type="xsd:date" sql:field="created_date"/>
+            <xsd:element name="Last-Updated-Date" type="xsd:date" sql:field="last_updated_date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Component-Parents">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Component-Parent" type="Component-Parent"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Component-Parent">
+        <xsd:sequence>
+            <xsd:element name="Parent-Comp-Id" type="xsd:integer" sql:field="parent_comp_id"/>
+            <xsd:element name="Child-Comp-Id" type="xsd:integer" sql:field="child_comp_id"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Metadata">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Metadata-Item" type="Metadata-Item"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Metadata-Item">
+        <xsd:sequence>
+            <xsd:element name="Id" type="xsd:integer"/>
+            <xsd:element name="Comp-Id" type="xsd:integer"/>
+            <xsd:element name="Metadata-Type-Id" type="xsd:integer"/>
+            <xsd:element name="Metadata-Value" type="xsd:string"/>
+            <xsd:element name="Source" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="Created-Date" type="xsd:date"/>
+            <xsd:element name="Last-Updated-Date" type="xsd:date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Component-Actions">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Component-Action" type="Component-Action"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Component-Action">
+        <xsd:sequence>
+            <xsd:element name="Comp-Id" type="xsd:integer" sql:field="comp_id"/>
+            <xsd:element name="Territory-Id" type="xsd:integer" sql:field="territory-id"/>
+            <xsd:element name="Published-Date" type="xsd:date" sql:field="published_date"/>
+            <xsd:element name="Download-From" type="ActionsByAsset" minOccurs="0"/>
+            <xsd:element name="Stream-From" type="ActionsByAsset" minOccurs="0"/>
+            <xsd:element name="Transfer2Pd-From" type="ActionsByAsset" minOccurs="0"/>
+            <xsd:element name="Item-Purchasable-From" type="ActionsByAsset" minOccurs="0"/>
+            <xsd:element name="Set-Purchasable-From" type="ActionsByAsset" minOccurs="0"/>
+            <xsd:element name="Sample-From" type="ActionsByAsset" minOccurs="0"/>
+            <xsd:element name="Preorder-From" type="ActionsByAsset" minOccurs="0"/>
+            <xsd:element name="SampleDld-From" type="ActionsByAsset" minOccurs="0"/>
+            <xsd:element name="Free-Stream-From" type="ActionsByAsset" minOccurs="0"/>
+            <xsd:element name="SendTo-From" type="ActionsByAsset" minOccurs="0"/>
+            <xsd:element name="Last-Updated-Date" type="xsd:date" sql:field="last_updated_date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ActionsByAsset">
+        <xsd:choice maxOccurs="unbounded">
+            <xsd:element name="a010" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a014" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a015" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a017" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a019" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a020" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a023" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a024" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a029" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a049" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a070" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a074" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a075" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a076" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a077" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a090" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a100" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a103" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a104" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a110" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a113" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a300" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a303" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a30X" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a310" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a320" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a324" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a330" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a334" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a340" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a350" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a360" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a374" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a400" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a403" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a404" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a40W" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a40X" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a40Z" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a410" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a413" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a420" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a423" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a430" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a433" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a434" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a440" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a443" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a450" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a453" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a454" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a460" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a463" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a500" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a501" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a502" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a503" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a504" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a510" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a511" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a512" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a520" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a521" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a522" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a800" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a980" type="DateOrTimedDateUnion"/>
+            <xsd:element name="a981" type="DateOrTimedDateUnion"/>
+        </xsd:choice>
+    </xsd:complexType>
+    <xsd:complexType name="Wholesale-Prices">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Wholesale-Price" type="Wholesale-Price"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Wholesale-Price">
+        <xsd:sequence>
+            <xsd:element name="Comp-Id" type="xsd:integer" sql:field="comp_id"/>
+            <xsd:element name="Price-Scope-Id" type="xsd:integer" sql:field="price-scope-id"/>
+            <xsd:element name="Territory-Id" type="xsd:integer" sql:field="territory-id"/>
+            <xsd:element name="Currency-Id" type="xsd:integer" sql:field="curr-id"/>
+            <xsd:choice>
+                <xsd:sequence>
+                    <xsd:element name="Price-Amount" type="xsd:float" sql:field="price-amount"/>
+                    <xsd:choice>
+                        <xsd:element name="Required-Retail-Price" type="xsd:float" sql:field="req-price" minOccurs="0"/>
+                        <xsd:element name="Sugg-Retail-Price" type="xsd:float" sql:field="sugg-price"/>
+                    </xsd:choice>
+                </xsd:sequence>
+                <xsd:sequence>
+                    <xsd:element name="Required-Retail-Price" type="xsd:float" sql:field="req-price"/>
+                </xsd:sequence>
+            </xsd:choice>
+            <xsd:element name="Effective-From-Date" type="xsd:date" sql:field="effective-from-date"/>
+            <xsd:element name="Effective-To-Date" type="xsd:date" sql:field="effective-to-date"/>
+            <xsd:element name="Created-Date" type="xsd:date" sql:field="created_date"/>
+            <xsd:element name="Last-Updated-Date" type="xsd:date" sql:field="last_updated_date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Retail-Prices">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Retail-Price" type="Retail-Price"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Retail-Price">
+        <xsd:sequence>
+            <xsd:element name="Comp-Id" type="xsd:integer" sql:field="comp_id"/>
+            <xsd:element name="Price-Scope-Id" type="xsd:integer" sql:field="price-scope-id"/>
+            <xsd:element name="Territory-Id" type="xsd:integer" sql:field="territory-id"/>
+            <xsd:element name="Currency-Id" type="xsd:integer" sql:field="curr-id"/>
+            <xsd:choice>
+                <xsd:sequence>
+                    <xsd:element name="Price-Amount" type="xsd:float" sql:field="price-amount"/>
+                    <xsd:choice>
+                        <xsd:element name="Required-Retail-Price" type="xsd:float" sql:field="req-price" minOccurs="0"/>
+                        <xsd:element name="Sugg-Retail-Price" type="xsd:float" sql:field="sugg-price"/>
+                    </xsd:choice>
+                </xsd:sequence>
+                <xsd:sequence>
+                    <xsd:element name="Required-Retail-Price" type="xsd:float" sql:field="req-price"/>
+                </xsd:sequence>
+            </xsd:choice>
+            <xsd:element name="Effective-From-Date" type="xsd:date" sql:field="effective-from-date"/>
+            <xsd:element name="Effective-To-Date" type="xsd:date" sql:field="effective-to-date"/>
+            <xsd:element name="Created-Date" type="xsd:date" sql:field="created_date"/>
+            <xsd:element name="Last-Updated-Date" type="xsd:date" sql:field="last_updated_date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Asset-Types">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Asset-Type" type="Asset-Type"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Asset-Type">
+        <xsd:sequence>
+            <xsd:element name="Asset-Code" type="xsd:string"/>
+            <xsd:element name="Asset-Code-Tag" type="xsd:string"/>
+            <xsd:element name="Description" type="xsd:string"/>
+            <xsd:element name="Description-Code" type="xsd:string"/>
+            <xsd:element name="Drm-Code" type="xsd:string"/>
+            <xsd:element name="File-Extension" type="xsd:string"/>
+            <xsd:element name="Buy-Price-Scope-Id" minOccurs="0" type="xsd:integer"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Collection-Assets-Map">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Cam-Item" type="Cam-Item"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Cam-Item">
+        <xsd:sequence>
+            <xsd:element name="Parent-Type-Id" type="xsd:integer"/>
+            <xsd:element name="Designated-Parent-Asset-Code" type="xsd:string"/>
+            <xsd:element name="Child-Type-Id" type="xsd:integer"/>
+            <xsd:element name="Child-Asset-Code" type="xsd:string"/>
+            <xsd:element name="Optional-Ind" type="tfIndicator"/>
+            <xsd:element name="Last-Updated-Date" type="xsd:date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Media-Files">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="File" type="File"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="File">
+        <xsd:sequence>
+            <xsd:element name="Comp-Id" type="xsd:integer"/>
+            <xsd:element name="Asset-Code" type="xsd:string"/>
+            <xsd:element name="Name" type="xsd:string"/>
+            <xsd:element name="File-Size" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="Video-Size" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="Bit-Rate" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="Last-Updated-Date" type="xsd:date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Related-Components">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Related-Component" type="Related-Component"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Related-Component">
+        <xsd:sequence>
+            <xsd:element name="Comp-Id" type="xsd:integer"/>
+            <xsd:element name="Related-Comp-Id" type="xsd:integer"/>
+            <xsd:element name="Role" type="xsd:string"/>
+            <xsd:element name="Created-Date" type="xsd:date"/>
+            <xsd:element name="Last-Updated-Date" type="xsd:date"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Alternate-Components">
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Alt-Group" type="Alt-Group"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Alt-Group">
+        <xsd:sequence>
+            <xsd:element name="Alt-Group-Id" type="xsd:integer"/>
+            <xsd:element name="Alt-Comp-Id" type="xsd:integer" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+
+    <xsd:complexType name="Feed">
+        <xsd:sequence>
+            <xsd:element name="Header" type="Header"/>
+            <xsd:element name="Statistics" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Total-label-owners" type="xsd:integer"/>
+                        <xsd:element name="Total-labels" type="xsd:integer"/>
+                        <xsd:element name="Total-components" type="xsd:integer"/>
+                        <xsd:element name="Total-components-by-type" type="Counts-by-comp-type"/>
+                        <xsd:element name="Total-artists" type="xsd:integer"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="Genre-Reference" type="Genre-Reference"/>
+            <xsd:element name="Component-Types" type="Component-Types"/>
+            <xsd:element name="Metadata-Types" type="Metadata-Types"/>
+            <xsd:element name="Metadata-Special-Codes" type="Metadata-Special-Codes"/>
+            <xsd:element name="Artist-Types" type="Artist-Types"/>
+            <xsd:element name="Territories" type="Territories"/>
+            <xsd:element name="Currencies" type="Currencies"/>
+            <xsd:element name="Price-Scopes" type="Price-Scopes"/>
+            <xsd:element name="Asset-Types" type="Asset-Types"/>
+            <xsd:element name="Collection-Assets-Map" type="Collection-Assets-Map"/>
+            <xsd:element name="Label-Owners" type="Label-Owners"/>
+            <xsd:element name="Labels" type="Labels"/>
+            <xsd:element name="Artists" type="Artists"/>
+            <xsd:element name="Components" type="Components"/>
+            <xsd:element name="Artist-Components" type="Artist-Components"/>
+            <xsd:element name="Artist-Metadata" type="Artist-Metadata"/>
+            <xsd:element name="Component-Parents" type="Component-Parents"/>
+            <xsd:element name="Metadata" type="Metadata"/>
+            <xsd:element name="Component-Actions" type="Component-Actions"/>
+            <xsd:element name="Wholesale-Prices" type="Wholesale-Prices" minOccurs="0"/>
+            <xsd:element name="Retail-Prices" type="Retail-Prices" minOccurs="0"/>
+            <xsd:element name="Media-Files" type="Media-Files" minOccurs="0"/>
+            <xsd:element name="Related-Components" type="Related-Components" minOccurs="0"/>
+            <xsd:element name="Alternate-Components" type="Alternate-Components" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Counts-by-comp-type">
+        <xsd:sequence>
+            <xsd:element name="ALBUM" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="TRACK" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="COLLECTION" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="MUSIC_VIDEO" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="TV_SERIES" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="TV_SHOW" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="MOVIE" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="EBOOK" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="EB_TRACK" type="xsd:integer" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Counts-artist-comp-type">
+        <xsd:sequence>
+            <xsd:element name="ARTIST" type="xsd:integer"/>
+            <xsd:element name="ALBUM" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="TRACK" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="COLLECTION" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="MUSIC_VIDEO" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="TV_SERIES" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="TV_SHOW" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="MOVIE" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="EBOOK" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="EB_TRACK" type="xsd:integer" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Metadata-stats">
+        <xsd:sequence>
+            <xsd:element name="ISRC" type="xsd:integer"/>
+            <xsd:element name="TrackNumber" type="xsd:integer"/>
+            <xsd:element name="DiskNumber" type="xsd:integer"/>
+            <xsd:element name="UPC" type="xsd:integer"/>
+            <xsd:element name="ParentalAdvisory" type="xsd:integer"/>
+            <xsd:element name="ReleaseDate" type="xsd:integer"/>
+            <xsd:element name="AmgId" type="xsd:integer"/>
+            <xsd:element name="MuzeId" type="xsd:integer"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:simpleType name="DateOrTimedDateUnion">
+        <xsd:union memberTypes="xsd:date xsd:dateTime"/>
+    </xsd:simpleType>
+</xsd:schema>
